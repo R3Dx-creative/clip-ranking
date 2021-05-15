@@ -1,9 +1,11 @@
+# 備忘録
+
 ## ファイル操作
 
-File - 組み込み
+## File - 組み込み
   * https://docs.ruby-lang.org/ja/latest/class/File.html
 
-FileUtils - `require 'fileutils'`が必要
+## FileUtils - `require 'fileutils'`が必要
   * https://docs.ruby-lang.org/ja/latest/class/FileUtils.html#M_COPY_STREAM
 
 ### 存在確認
@@ -45,6 +47,6 @@ FileUtils.copy(src, dest)
 FileUtils.move(src, dest)
 ```
 
-### TODO
+## TODO
 
 * 複数ファイルをいっぺんに移動、コピー
