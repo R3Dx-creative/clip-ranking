@@ -1,2 +1,2 @@
-# clip_ranking
+# clip-ranking
 みんなのクリップランキング化システム
