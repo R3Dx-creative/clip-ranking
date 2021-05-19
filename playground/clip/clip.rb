@@ -10,8 +10,6 @@ class Clip
   @@dest = Config.get("dest")
   @@ranked_folder = format(@@dest["ranked"], Date.today.strftime("%Y-%m-%d"))
 
-  attr_reader :dir, :file, :like
-
   def initialize(dir, file, like)
     @dir = dir
     @file = file
@@ -94,10 +92,10 @@ class Clip
   end
 
   def src_path
-    "#{@dir}/#{file}"
+    "#{@dir}/#{@file}"
   end
 
   def dest_path
-    "#{@kind}/#{file}"
+    "#{@kind}/#{@file}"
   end
 end
