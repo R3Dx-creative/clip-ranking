@@ -4,3 +4,4 @@ dest:
   unranked: "3.Unranked"
   revenging: "2.Revenging"
   ranked: "Ranked.%s"
+history_file: "history.json"

@@ -16,7 +16,7 @@ class Clip
     @dir = dir
     @file = file
     @like = like
-    @classified = dir
+    @kind = dir
   end
 
   def unranked?
@@ -26,8 +26,8 @@ class Clip
   # クリップ移動メソッド(安全のため、移動先を保持するだけ)
   # commitメソッドによってファイルの移動を行う。
   # 第二引数に:forceを指定すると、ファイルの移動を行う。
-  def move(dest, option=nil)
-    @classified = dest
+  def move!(dest, option=nil)
+    @kind = dest
 
     if option == :force
       commit
@@ -35,50 +35,50 @@ class Clip
   end
 
   def commit
-    if @dir == @classified
+    if @dir == @kind
       return
     end
     
-    unless Dir.exist?(@classified)
-      FileUtils.mkdir_p(@classified)
+    unless Dir.exist?(@kind)
+      FileUtils.mkdir_p(@kind)
     end
 
-    FileUtils.move("#{@dir}/#{@file}", @classified)
+    FileUtils.move("#{@dir}/#{@file}", @kind)
   end
 
-  def rank
-    move(@@ranked_folder)
+  def rank!
+    move!(@@ranked_folder)
   end
 
-  def classify
+  def classify!
     dest =
       if unranked?
         @@dest["unranked"]
       else
         @@dest["revenging"]
       end
-    move(dest)
+    move!(dest)
   end
 
   def self.clips(src, result)
     Dir.each_child(src).map { |file| Clip.new(src, file, result[file]) }
   end
 
-  def self.classify(*clips)
+  def self.classified(*clips)
     clips = clips.flatten
     unless clips
-      return
+      return []
     end
     
     clips.sort_by!(&:sort_key)
     n = clips.size
-    clips[0...@@ranking_n].each(&:rank)
+    clips[0...@@ranking_n].each(&:rank!)
 
     if @@ranking_n < n
-      clips[@@ranking_n...n].each(&:classify)
+      clips[@@ranking_n...n].each(&:classify!)
     end
     
-    return clips
+    clips
   end
 
   def sort_key
@@ -86,10 +86,18 @@ class Clip
   end
   
   def to_s
-    if @dir == @classified
-      "Clip(src: #{@dir}/#{file}, like: #{@like})"
+    if @dir == @kind
+      "Clip(src: #{src_path}, like: #{@like})"
     else
-      "Clip(src: #{@dir}/#{file}, like: #{@like}) -> #{@classified}/#{file}"
+      "Clip(src: #{src_path}, like: #{@like}) -> #{dest_path}"
     end
+  end
+
+  def src_path
+    "#{@dir}/#{file}"
+  end
+
+  def dest_path
+    "#{@kind}/#{file}"
   end
 end

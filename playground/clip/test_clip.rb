@@ -16,5 +16,6 @@ class ClipTest < Test::Unit::TestCase
 
     clips = Clip.clips("1.Queue", result)
     ClipClassifier.run(clips)
+    ClipClassifier.revert
   end 
 end
