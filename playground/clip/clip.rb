@@ -84,11 +84,12 @@ class Clip
   end
   
   def to_s
-    if @dir == @kind
-      "Clip(src: #{src_path}, like: #{@like})"
-    else
-      "Clip(src: #{src_path}, like: #{@like}) -> #{dest_path}"
+    base = "Clip(src: #{src_path}, like: #{@like})"
+    if @dir != @kind
+      base << " -> #{dest_path}"
     end
+
+    base
   end
 
   def src_path
