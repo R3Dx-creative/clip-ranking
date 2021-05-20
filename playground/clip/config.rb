@@ -1,7 +1,7 @@
-require 'yaml'
+require 'json'
 
 class Config
-  @@config = YAML.load_file("config.yaml")
+  @@config = File.open("config.json") { |f| JSON.load(f) }
   
   def self.get(s)
     @@config[s]
