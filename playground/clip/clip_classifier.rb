@@ -1,15 +1,45 @@
 require 'json'
 require 'pp'
+require 'date'
 
 require './clip'
 require './config'
 
-
 module ClipClassifier
+  @@border = Config.get("border")
+  @@ranking_n = Config.get("ranking_n")
+  @@dest = Config.get("dest")
+  @@unranked_folder = @@dest["unranked"]
+  @@revenging_folder = @@dest["revenging"]
+  @@ranked_folder = format(@@dest["ranked"], Date.today.strftime("%Y-%m-%d"))
   @@history_file = Config.get("history_file")
 
+  def classify(*clips)
+    clips = clips.flatten
+    unless clips
+      return []
+    end
+    
+    clips.sort_by! { |clip| [-clip.like, clip.file] }
+
+    # クリップの仕分け
+    clips.each_with_index do |clip, i|
+      dest =
+        if i < @@ranking_n
+          @@ranked_folder
+        elsif clip.like >= @@border
+          @@revenging_folder
+        else
+          @@unranked_folder
+        end
+      clip.move!(dest)
+    end
+    
+    clips
+  end
+
   def run(clips)
-    sorted = Clip.classified(clips)
+    sorted = classify(clips)
 
     puts "次のファイルを移動しますか?「Y」を入力すると移動します。"
     puts sorted
@@ -55,5 +85,5 @@ module ClipClassifier
     end
   end
 
-  module_function :run, :save_history, :revert
+  module_function :classify, :run, :save_history, :revert
 end
