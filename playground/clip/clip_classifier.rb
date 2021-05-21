@@ -6,13 +6,13 @@ require './clip'
 require './config'
 
 module ClipClassifier
-  @@border = Config.get("border")
-  @@ranking_n = Config.get("ranking_n")
-  @@dest = Config.get("dest")
+  @@border = Config["border"]
+  @@ranking_n = Config["ranking_n"]
+  @@dest = Config["dest"]
   @@unranked_folder = @@dest["unranked"]
   @@revenging_folder = @@dest["revenging"]
   @@ranked_folder = format(@@dest["ranked"], Date.today.strftime("%Y-%m-%d"))
-  @@history_file = Config.get("history_file")
+  @@history_file = Config["history_file"]
 
   def classify(*clips)
     clips = clips.flatten
