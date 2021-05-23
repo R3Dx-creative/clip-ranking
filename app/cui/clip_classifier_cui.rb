@@ -28,7 +28,7 @@ module ClipClassifierCUI
   end
 
   def revert
-    File.open("#{@@base}/#{@@history_file}") do |f|
+    File.open(ClipClassifier.history_path) do |f|
       history = JSON.load(f)
 
       puts "ファイルを一つ前の状態に戻しますか?「Y」を入力すると移動します。"
