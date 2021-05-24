@@ -13,8 +13,7 @@ module ClipClassifier
   @@unranked_folder = @@dest["unranked"]
   @@revenging_folder = @@dest["revenging"]
   @@ranked_folder = format(@@dest["ranked"], Date.today.strftime("%Y-%m-%d"))
-  @@history_file = Config["history_file"]
-  @@history_path = "#{@@base}/#{@@history_file}"
+  @@history_path = "#{@@base}/#{Config["history_file"]}"
 
   def history_path
     @@history_path

@@ -7,9 +7,6 @@ require_relative '../lib/clip_classifier'
 require_relative '../../config/config'
 
 module ClipClassifierCUI
-  @@base = Config["base"]
-  @@history_file = Config["history_file"]
-
   def run(clips)
     sorted = ClipClassifier.classify(clips)
 
