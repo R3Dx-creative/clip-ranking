@@ -10,7 +10,7 @@ https://r3dx-creative.github.io/programming-introduction/%E8%A7%A3%E7%AD%94.%E8%
 
 ## 改善したほうの読み方
 
-実行のサンプルは`test_clip.rb`を参考にしてください。
+実行のサンプルは`test_clipclassifier.rb`を参考にしてください。
 
 ### Clipクラス
 
