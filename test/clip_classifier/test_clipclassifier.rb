@@ -1,5 +1,6 @@
 require 'test/unit'
 
+require_relative '../../config/config'
 require_relative '../../app/cui/clip_classifier_cui'
 
 class ClipClassifierTest < Test::Unit::TestCase
@@ -14,7 +15,9 @@ class ClipClassifierTest < Test::Unit::TestCase
       "6.txt" => 1
     }
 
-    ClipClassifierCUI.run("#{__dir__}/test_base/1.Queue", result)
+    # config/local_config.json の base に 同階層のフォルダ test_base のパスを指定してください。
+    # FIXME 手動で設定を変えないようにしたい
+    ClipClassifierCUI.run("#{Config["base"]}/1.Queue", result)
     ClipClassifierCUI.revert
   end
 end
