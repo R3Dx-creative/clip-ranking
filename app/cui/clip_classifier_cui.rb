@@ -7,7 +7,8 @@ require_relative '../lib/clip_classifier'
 require_relative '../../config/config'
 
 module ClipClassifierCUI
-  def run(clips)
+  def run(src, result)
+    clips = Clip.clips(src, result)
     sorted = ClipClassifier.classify(clips)
 
     puts "次のファイルを移動しますか?「Y」を入力すると移動します。"

@@ -2,7 +2,6 @@ require 'json'
 require 'pp'
 require 'date'
 
-require_relative '../lib/clip'
 require_relative '../../config/config'
 
 module ClipClassifier

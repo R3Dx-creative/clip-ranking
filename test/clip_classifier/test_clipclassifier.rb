@@ -16,8 +16,7 @@ class ClipClassifierTest < Test::Unit::TestCase
     }
 
     # config/local_config.json の base にフォルダ test_base を設定してください。
-    clips = Clip.clips("#{Config["base"]}/1.Queue", result)
-    ClipClassifierCUI.run(clips)
+    ClipClassifierCUI.run("#{Config["base"]}/1.Queue", result)
     ClipClassifierCUI.revert
   end
 end
