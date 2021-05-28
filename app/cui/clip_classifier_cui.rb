@@ -4,7 +4,6 @@ require 'date'
 
 require_relative '../lib/clip'
 require_relative '../lib/clip_classifier'
-require_relative '../../config/config'
 
 module ClipClassifierCUI
   def run(src, result)

@@ -1,7 +1,6 @@
 require 'test/unit'
 
 require_relative '../../app/cui/clip_classifier_cui'
-require_relative '../../app/lib/clip'
 
 class ClipClassifierTest < Test::Unit::TestCase
   def test_classify
@@ -15,8 +14,7 @@ class ClipClassifierTest < Test::Unit::TestCase
       "6.txt" => 1
     }
 
-    # config/local_config.json の base にフォルダ test_base を設定してください。
-    ClipClassifierCUI.run("#{Config["base"]}/1.Queue", result)
+    ClipClassifierCUI.run("#{__dir__}/test_base/1.Queue", result)
     ClipClassifierCUI.revert
   end
 end
