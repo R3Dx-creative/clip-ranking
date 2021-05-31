@@ -33,9 +33,11 @@ class ClipTest < Test::Unit::TestCase
     clip = init(0, 0)
     expect = "Clip(src: #{clip.src_path}, like: 0)"
     assert_equal expect, clip.to_s
+    puts clip
 
     clip.move!(@@dest)
     assert_equal "#{expect} -> #{clip.dest_path}", clip.to_s
+    puts clip
   end
 
   def test_equal
@@ -61,6 +63,7 @@ class ClipTest < Test::Unit::TestCase
     actual_clips = Clip.clips(@@dir, result)
 
     assert_equal expect_clips, actual_clips
+    puts actual_clips
   end
 
   def test_commit
