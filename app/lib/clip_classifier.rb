@@ -6,7 +6,7 @@ require_relative '../../config/config'
 
 # クリップを仕分けるモジュール。
 # +config/app_config.json+と+config/local_config.json+の設定値をもとに、+classify+メソッドでクリップを仕分ける。
-# 仕様については{README}[/README_md.html]参照。
+# 仕様については{README}[./README_md.html]参照。
 # ====設定値
 # * local_config.json
 #   * base - 仕分け作業のルートフォルダ
