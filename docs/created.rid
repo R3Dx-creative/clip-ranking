@@ -1,7 +1,7 @@
-Mon, 31 May 2021 14:55:58 +0900
-app/cui/clip_classifier_cui.rb	Mon, 31 May 2021 14:27:34 +0900
-app/lib/clip.rb	Mon, 31 May 2021 14:15:14 +0900
-app/lib/clip_classifier.rb	Mon, 31 May 2021 14:55:49 +0900
-config/README.md	Mon, 31 May 2021 14:44:46 +0900
-config/config.rb	Mon, 31 May 2021 14:36:49 +0900
-README.md	Mon, 31 May 2021 14:40:43 +0900
+Wed, 02 Jun 2021 00:31:26 +0900
+app/cui/clip_classifier_cui.rb	Tue, 01 Jun 2021 20:29:34 +0900
+app/lib/clip.rb	Tue, 01 Jun 2021 20:29:34 +0900
+app/lib/clip_classifier.rb	Wed, 02 Jun 2021 00:24:00 +0900
+config/config.rb	Tue, 01 Jun 2021 20:29:34 +0900
+config/README.md	Wed, 02 Jun 2021 00:26:38 +0900
+README.md	Tue, 01 Jun 2021 20:29:34 +0900

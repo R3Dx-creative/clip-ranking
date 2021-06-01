@@ -84,32 +84,6 @@
     
 <p>クリップを仕分けるモジュール。 <code>config/app_config.json</code>と<code>config/local_config.json</code>の設定値をもとに、<code>classify</code>メソッドでクリップを仕分ける。 仕様については<a href="./README_md.html">README</a>参照。</p>
 
-<h4 id="module-ClipClassifier-label-E8-A8-AD-E5-AE-9A-E5-80-A4">設定値<span><a href="#module-ClipClassifier-label-E8-A8-AD-E5-AE-9A-E5-80-A4">&para;</a> <a href="#top">&uarr;</a></span></h4>
-<ul><li>
-<p>local_config.json</p>
-<ul><li>
-<p>base - 仕分け作業のルートフォルダ</p>
-</li></ul>
-</li><li>
-<p>app_config.json</p>
-<ul><li>
-<p>border - ランキングに入るためのいいね数のボーダー</p>
-</li><li>
-<p>ranking_n - ランキングに入れる数</p>
-</li><li>
-<p>dest - 移動先フォルダ</p>
-<ul><li>
-<p>unranked - ランキング外を入れるフォルダ</p>
-</li><li>
-<p>revenging - ランキング外ではあるが、いいね数がボーダーを超えた場合に入れるフォルダ</p>
-</li><li>
-<p>ranked - ランキング内を入れるフォルダ。</p>
-</li></ul>
-</li><li>
-<p>history_file - 直前の移動情報を保持するファイル名(json)</p>
-</li></ul>
-</li></ul>
-
   </section>
 
   <section id="5Buntitled-5D" class="documentation-section">
@@ -155,7 +129,7 @@
 </pre>
 
           <div class="method-source-code" id="classify-source">
-            <pre><span class="ruby-comment"># File app/lib/clip_classifier.rb, line 52</span>
+            <pre><span class="ruby-comment"># File app/lib/clip_classifier.rb, line 41</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">classify</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">clips</span>)
   <span class="ruby-identifier">clips</span> = <span class="ruby-identifier">clips</span>.<span class="ruby-identifier">flatten</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">clips</span>
@@ -196,7 +170,7 @@
           <p>直前の移動情報を保持するファイルのパス</p>
 
           <div class="method-source-code" id="history_path-source">
-            <pre><span class="ruby-comment"># File app/lib/clip_classifier.rb, line 32</span>
+            <pre><span class="ruby-comment"># File app/lib/clip_classifier.rb, line 21</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">history_path</span>
   <span class="ruby-identifier">@@history_path</span>
 <span class="ruby-keyword">end</span></pre>
@@ -221,7 +195,7 @@
 </dd></dl>
 
           <div class="method-source-code" id="save_history-source">
-            <pre><span class="ruby-comment"># File app/lib/clip_classifier.rb, line 78</span>
+            <pre><span class="ruby-comment"># File app/lib/clip_classifier.rb, line 67</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">save_history</span>(<span class="ruby-identifier">clips</span>)
   <span class="ruby-identifier">history</span> = <span class="ruby-identifier">clips</span>
     .<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">clip</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">clip</span>.<span class="ruby-identifier">dest_path</span>, <span class="ruby-identifier">clip</span>.<span class="ruby-identifier">src_path</span>] }

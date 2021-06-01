@@ -7,25 +7,14 @@ require_relative '../../config/config'
 # クリップを仕分けるモジュール。
 # +config/app_config.json+と+config/local_config.json+の設定値をもとに、+classify+メソッドでクリップを仕分ける。
 # 仕様については{README}[./README_md.html]参照。
-# ====設定値
-# * local_config.json
-#   * base - 仕分け作業のルートフォルダ
-# * app_config.json
-#   * border - ランキングに入るためのいいね数のボーダー
-#   * ranking_n - ランキングに入れる数
-#   * dest - 移動先フォルダ
-#     * unranked - ランキング外を入れるフォルダ
-#     * revenging - ランキング外ではあるが、いいね数がボーダーを超えた場合に入れるフォルダ
-#     * ranked - ランキング内を入れるフォルダ。
-#   * history_file - 直前の移動情報を保持するファイル名(json)
 module ClipClassifier
   @@base = Config["base"]
   @@border = Config["border"]
   @@ranking_n = Config["ranking_n"]
-  @@dest = Config["dest"]
-  @@unranked_folder = @@dest["unranked"]
-  @@revenging_folder = @@dest["revenging"]
-  @@ranked_folder = format(@@dest["ranked"], Date.today.strftime("%Y-%m-%d"))
+  @@src = Config["src"]
+  @@unranked_folder = @@src["unranked"]
+  @@revenging_folder = @@src["revenging"]
+  @@ranked_folder = format(@@src["ranked"], Date.today.strftime("%Y-%m-%d"))
   @@history_path = "#{@@base}/#{Config["history_file"]}"
 
   # 直前の移動情報を保持するファイルのパス

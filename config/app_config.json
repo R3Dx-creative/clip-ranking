@@ -1,7 +1,9 @@
 {
   "border": 5,
   "ranking_n": 3,
-  "dest": {
+  "src": {
+    "shared": "0.Shared",
+    "queue": "1.Queue",
     "unranked": "3.Unranked",
     "revenging": "2.Revenging",
     "ranked": "Ranked.%s"
