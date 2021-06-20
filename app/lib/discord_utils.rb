@@ -5,25 +5,20 @@ require_relative '../../config/config'
 # Discord周りの処理
 module DiscordUtils
   # DiscordのWebhoolのURL
-  @WEBHOOK_URL = Config["discord"]["webhook_url"].freeze
+  DISCORD_CONFIG = Config["discord"].freeze
+  WEBHOOK_URL = DISCORD_CONFIG["webhook_url"].freeze
+  CHANNEL_ID = DISCORD_CONFIG["channel_id"].freeze
   # DiscordのWebhookのクライアント
-  @client = Discordrb::Webhooks::Client.new(url: @WEBHOOK_URL)
-
-  # DiscordのWebhookでメッセージを送るためのクライアント(シングルトン)
-  def get_client
-    @client
-  end
+  WEBHOOK_CLIENT = Discordrb::Webhooks::Client.new(url: WEBHOOK_URL).freeze
 
   # シンプルなメッセージを送るやつ
-  def send_simple_message(message, client=nil)
+  def self.send_simple_message(message, client=nil)
     if client.nil?
-      client = @client
+      client = WEBHOOK_CLIENT
     end
 
     client.execute do |builder|
       builder.content = message
     end
   end
-
-  module_function :send_simple_message, :get_client
 end

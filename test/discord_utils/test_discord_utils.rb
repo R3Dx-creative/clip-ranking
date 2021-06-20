@@ -3,14 +3,18 @@ require 'test/unit'
 require_relative '../../app/lib/discord_utils'
 
 class DiscordUtilsTest < Test::Unit::TestCase
-  def test_get_client
-    client = DiscordUtils.get_client
+  def test_webhook_client
+    client = DiscordUtils::WEBHOOK_CLIENT
     assert_not_nil client
   end
 
   def test_send_simple_message
-    client = DiscordUtils.get_client
+    client = DiscordUtils::WEBHOOK_CLIENT
     DiscordUtils.send_simple_message("Client in arg", client)
     DiscordUtils.send_simple_message("Client not in arg")
+  end
+  
+  def test_get_reactions
+    assert_equal false, true
   end
 end

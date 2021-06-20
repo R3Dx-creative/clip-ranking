@@ -33,7 +33,7 @@ module ClipClassifier
   #   clips = Clip.clips(src, result)
   #   sorted = ClipClassifier.classify(clips)
   #   sorted.each(&:commit)
-  def classify(*clips)
+  def self.classify(*clips)
     clips = clips.flatten
     unless clips
       return []
@@ -59,7 +59,7 @@ module ClipClassifier
 
   # 移動元と移動先の情報を保存する(直前の情報だけ)
   # [+clips+] クリップ集(Clip)
-  def save_history(clips)
+  def self.save_history(clips)
     history = clips
       .map { |clip| [clip.dest_path, clip.src_path] }
       .to_h
@@ -68,7 +68,4 @@ module ClipClassifier
       JSON.dump(history, f)
     end
   end
-
-
-  module_function :classify, :save_history
 end
