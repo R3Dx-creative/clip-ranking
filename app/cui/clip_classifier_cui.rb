@@ -65,7 +65,7 @@ module ClipClassifierCUI
   # +config/app_config.json+の+history+に設定しているファイルに書かれている履歴(※)をもとに移動を一つ前の状態に戻す。
   # (※ ClipClassifier.save_history で保存した内容)
   def revert
-    File.open(ClipClassifier.history_path) do |f|
+    File.open(ClipClassifier::HISTORY_PATH) do |f|
       history = JSON.load(f)
 
       puts "ファイルを一つ前の状態に戻しますか?「Y」を入力すると移動します。"
