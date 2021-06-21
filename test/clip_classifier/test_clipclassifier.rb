@@ -1,6 +1,7 @@
 require 'test/unit'
 
 require_relative '../../config/config'
+require_relative '../../app/lib/clip_classifier'
 require_relative '../../app/cui/clip_classifier_cui'
 
 class ClipClassifierTest < Test::Unit::TestCase
@@ -18,6 +19,7 @@ class ClipClassifierTest < Test::Unit::TestCase
     # config/local_config.json の base に 同階層のフォルダ test_base のパスを指定してください。
     # FIXME 手動で設定を変えないようにしたい
     ClipClassifierCUI.run("#{Config["base"]}/1.Queue", result)
+    assert_equal ClipClassifier::History.last_date, Date.today.strftime("%Y-%m-%d")
     ClipClassifierCUI.revert
   end
 end

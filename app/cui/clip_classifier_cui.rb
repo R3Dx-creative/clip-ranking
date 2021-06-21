@@ -44,7 +44,7 @@ module ClipClassifierCUI
   # クリップの仕分けを実施する
   # [+src+] 仕分けたいクリップが格納されているフォルダ
   # [+result+] クリップのファイル名といいね数の対応
-  def run(src, result)
+  def self.run(src, result)
     clips = Clip.clips(src, result)
     sorted = ClipClassifier.classify(clips)
 
@@ -54,7 +54,7 @@ module ClipClassifierCUI
     ans = gets.chomp
 
     if ans == "Y"
-      ClipClassifier.save_history(sorted)
+      ClipClassifier::History.save(sorted, :classified)
       sorted.each(&:commit)
       puts "移動しました。"
     else
@@ -62,27 +62,22 @@ module ClipClassifierCUI
     end 
   end
 
-  # +config/app_config.json+の+history+に設定しているファイルに書かれている履歴(※)をもとに移動を一つ前の状態に戻す。
-  # (※ ClipClassifier.save_history で保存した内容)
-  def revert
-    File.open(ClipClassifier::HISTORY_PATH) do |f|
-      history = JSON.load(f)
+  # +config/app_config.json+の+history+に設定しているファイルに書かれている履歴をもとに移動を一つ前の状態に戻す。
+  def self.revert
+    history = ClipClassifier::History.load["history"]
 
-      puts "ファイルを一つ前の状態に戻しますか?「Y」を入力すると移動します。"
-      PP.pp history
-      print ">>"
-      ans = gets.chomp
-      
-      if ans == "Y"
-        history.each do |u, v|
-          FileUtils.move(u, v)
-        end
-        puts "移動しました。"
-      else
-        puts "キャンセルされました。"
-      end 
+    puts "ファイルを一つ前の状態に戻しますか?「Y」を入力すると移動します。"
+    PP.pp history
+    print ">>"
+    ans = gets.chomp
+    
+    if ans == "Y"
+      history.each do |u, v|
+        FileUtils.move(u, v)
+      end
+      puts "移動しました。"
+    else
+      puts "キャンセルされました。"
     end
   end
-
-  module_function :run, :revert
 end

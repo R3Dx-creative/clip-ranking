@@ -14,8 +14,7 @@ module ClipClassifier
   SRC = Config["src"].freeze
   UNRANKED_FOLDER = SRC["unranked"].freeze
   REVENGING_FOLDER = SRC["revenging"].freeze
-  RANKED_FOLDER = format(SRC["ranked"], Date.today.strftime("%Y-%m-%d")).freeze
-  HISTORY_PATH = "#{BASE}/#{Config["history_file"]}".freeze
+  RANKED_FOLDER = SRC["ranked"].freeze
 
   # クリップを仕分けるメソッド。設定値と Clip オブジェクトの+like+をもとに+move!+まで行う
   # [+clips+] クリップ集(Clip)
@@ -45,7 +44,7 @@ module ClipClassifier
     clips.each_with_index do |clip, i|
       dest =
         if i < RANKING_N
-          RANKED_FOLDER
+          format(RANKED_FOLDER, Date.today.strftime("%Y-%m-%d"))
         elsif clip.like >= BORDER
           REVENGING_FOLDER
         else
@@ -57,15 +56,26 @@ module ClipClassifier
     clips
   end
 
-  # 移動元と移動先の情報を保存する(直前の情報だけ)
-  # [+clips+] クリップ集(Clip)
-  def self.save_history(clips)
-    history = clips
-      .map { |clip| [clip.dest_path, clip.src_path] }
-      .to_h
-
-    File.open(HISTORY_PATH, "w") do |f|
-      JSON.dump(history, f)
+  module History
+    HISTORY_PATH = "#{BASE}/#{Config["history_file"]}".freeze
+    # 移動元と移動先の情報を保存する(直前の情報だけ)
+    # [+clips+] クリップ集(Clip)
+    def self.save(clips, status)
+      clip_history = clips
+        .map { |clip| [clip.dest_path, clip.src_path] }
+        .to_h
+  
+      File.open(HISTORY_PATH, "w") do |f|
+        JSON.dump({date: Date.today.strftime("%Y-%m-%d"), history: clip_history, status: status}, f)
+      end
+    end
+  
+    def self.load
+      File.open(HISTORY_PATH) { |f| JSON.load(f) }
+    end
+  
+    def self.last_date
+      load["date"]
     end
   end
 end

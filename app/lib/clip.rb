@@ -97,7 +97,7 @@ class Clip
   #    result = {"clip1.mp4" => 1, "clip2.map" => 10}
   #    clips = Clip.clips("clips", result)
   #    # [Clip(src: clips/clip1.mp4, like: 1), Clip(src: clips/clip2.mp4, like: 10)]
-  def self.clips(src, result)
+  def self.clips(src, result={})
     Dir.each_child(src).map { |file| Clip.new(src, file, result[file]) }
   end
 end
