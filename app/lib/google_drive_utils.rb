@@ -6,7 +6,7 @@ require_relative '../../config/config'
 module GoogleDriveUtils
   # Google Driveにアクセスするための設定ファイルの名前
   CONFIG_FILE = Config["google_drive"]["session_config_file"].freeze
-  SESSION = GoogleDrive::Session.from_config(CONFIG_FILE).freeze
+  SESSION = GoogleDrive::Session.from_config(CONFIG_FILE)
 
   # 動画ファイルを取得するやつ
   # バリデーションはとりあえず考えない(TODO)
@@ -16,7 +16,7 @@ module GoogleDriveUtils
       session = SESSION
     end
     
-    folder = session.files(q: "name = '#{folder_name}'")[0]
-    session.files(q: "parents in '#{folder.id}'")
+    folder = session.collection_by_title(folder_name)
+    folder.files(q: ["parents in ?", folder.id])
   end
 end
