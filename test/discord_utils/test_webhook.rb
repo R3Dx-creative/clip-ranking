@@ -9,9 +9,9 @@ class DiscordUtilsTest < Test::Unit::TestCase
     assert_not_nil client
   end
 
-  def test_send_simple_message
+  def test_post_map
     client = DiscordUtils::WEBHOOK_CLIENT
-    DiscordUtils.send_simple_message("Client in arg", client)
-    DiscordUtils.send_simple_message("Client not in arg")
+    DiscordUtils.post_map({id: 1230, name: "Client in arg"}, client)
+    DiscordUtils.post_map({id: 5346, content: "Client not in arg"})
   end
 end

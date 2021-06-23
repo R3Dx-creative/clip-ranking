@@ -20,22 +20,22 @@ module DiscordUtils
     Discordrb::Bot.new(token: TOKEN)
   ).freeze
 
-  # シンプルなメッセージを送るやつ
-  def self.send_simple_message(message, client=nil)
-    if client.nil?
-      client = WEBHOOK_CLIENT
-    end
+  # Hashをメッセージにして送る
+  def self.post_map(contents_map, client=nil)
+    client = client || WEBHOOK_CLIENT
+
+    message = contents_map.map { |key, value| 
+      "#{key}:#{value}"
+    }.join("\n")
 
     client.execute do |builder|
       builder.content = message
     end
   end
 
-  # メッセージ取得するやつ
+  # メッセージ取得する
   def self.history(amount, channel=nil)
-    if channel.nil?
-      channel = CHANNEL
-    end
+    client = client || WEBHOOK_CLIENT
 
     channel.history(amount)
   end
