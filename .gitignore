@@ -56,4 +56,5 @@ Gemfile.lock
 # .rubocop-https?--*
 
 # ローカルの情報
-history.json
+shared.json
+classified.json

@@ -4,6 +4,7 @@ require 'date'
 
 require_relative '../lib/clip'
 require_relative '../lib/clip_classifier'
+require_relative '../lib/history'
 
 # CUIによるクリップの仕分け
 # ==== 例
@@ -54,7 +55,7 @@ module ClipClassifierCUI
     ans = gets.chomp
 
     if ans == "Y"
-      ClipClassifier::History.save(sorted, :classified)
+      History.save_classified(sorted)
       sorted.each(&:commit)
       puts "移動しました。"
     else
@@ -64,7 +65,7 @@ module ClipClassifierCUI
 
   # +config/app_config.json+の+history+に設定しているファイルに書かれている履歴をもとに移動を一つ前の状態に戻す。
   def self.revert
-    history = ClipClassifier::History.load["history"]
+    history = History.load_classified["history"]
 
     puts "ファイルを一つ前の状態に戻しますか?「Y」を入力すると移動します。"
     PP.pp history

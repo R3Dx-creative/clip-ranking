@@ -55,27 +55,4 @@ module ClipClassifier
     
     clips
   end
-
-  module History
-    HISTORY_PATH = "#{BASE}/#{Config["history_file"]}".freeze
-    # 移動元と移動先の情報を保存する(直前の情報だけ)
-    # [+clips+] クリップ集(Clip)
-    def self.save(clips, status)
-      clip_history = clips
-        .map { |clip| [clip.dest_path, clip.src_path] }
-        .to_h
-  
-      File.open(HISTORY_PATH, "w") do |f|
-        JSON.dump({date: Date.today.strftime("%Y-%m-%d"), history: clip_history, status: status}, f)
-      end
-    end
-  
-    def self.load
-      File.open(HISTORY_PATH) { |f| JSON.load(f) }
-    end
-  
-    def self.last_date
-      load["date"]
-    end
-  end
 end

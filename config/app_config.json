@@ -8,5 +8,8 @@
     "revenging": "2.Revenging",
     "ranked": "Ranked.%s"
   },
-  "history_file": "history.json"
+  "history": {
+    "classified": "classified.json",
+    "shared": "shared.json"
+  }
 }
