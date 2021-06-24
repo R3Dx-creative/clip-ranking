@@ -33,11 +33,10 @@ module GoogleDriveUtils
     end
   end
 
-  def self.create_json(title, map, session=nil)
+  def self.upload_json(title, map, session=nil)
     session = session || SESSION
 
-    
-    session.create_from_string(title)
-
+    json_string = JSON.dump(map)
+    session.upload_from_string(json_string, title)
   end
 end
