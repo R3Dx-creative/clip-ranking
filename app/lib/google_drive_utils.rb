@@ -21,7 +21,7 @@ module GoogleDriveUtils
 
   # srcからdestにファイルをすべて移動する
   def self.move_all_videos(src, dest, session=nil)
-    session = session || SESSION
+    session ||= SESSION
 
     src_folder = session.collection_by_title(src)
     src_videos = src_folder.files(q: ["parents in ?", src_folder.id])
@@ -34,7 +34,7 @@ module GoogleDriveUtils
   end
 
   def self.upload_json(title, map, session=nil)
-    session = session || SESSION
+    session ||= SESSION
 
     json_string = JSON.dump(map)
     session.upload_from_string(json_string, title)

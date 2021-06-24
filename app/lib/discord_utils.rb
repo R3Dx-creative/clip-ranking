@@ -22,7 +22,7 @@ module DiscordUtils
 
   # Hashをメッセージにして送る
   def self.post_map(contents_map, client=nil)
-    client = client || WEBHOOK_CLIENT
+    client ||= WEBHOOK_CLIENT
 
     message = contents_map.map { |key, value| 
       "#{key}:#{value}"
@@ -35,7 +35,7 @@ module DiscordUtils
 
   # メッセージ取得する
   def self.history(amount, channel=nil)
-    client = client || WEBHOOK_CLIENT
+    client ||= WEBHOOK_CLIENT
 
     channel.history(amount)
   end
