@@ -5,6 +5,7 @@ require 'date'
 require_relative '../lib/clip'
 require_relative '../lib/clip_classifier'
 require_relative '../lib/history'
+require_relative '../../config/config'
 
 # CUIによるクリップの仕分け
 # ==== 例
@@ -42,6 +43,8 @@ require_relative '../lib/history'
 #   >>Y
 #   移動しました。
 module ClipClassifierCUI
+  BASE = Config["base"].freeze
+
   # クリップの仕分けを実施する
   # [+src+] 仕分けたいクリップが格納されているフォルダ
   # [+result+] クリップのファイル名といいね数の対応
@@ -74,7 +77,7 @@ module ClipClassifierCUI
     
     if ans == "Y"
       history.each do |u, v|
-        FileUtils.move(u, v)
+        FileUtils.move("#{BASE}/#{u}", "#{BASE}/#{v}")
       end
       puts "移動しました。"
     else

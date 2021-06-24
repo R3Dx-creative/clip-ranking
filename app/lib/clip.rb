@@ -1,5 +1,7 @@
 require 'fileutils'
 
+require_relative '../../config/config'
+
 # ファイルといいね数を表すクラス。
 # 主な機能はファイルの移動(+move!+メソッドと+commit+メソッド)。
 # ==== 例
@@ -10,6 +12,8 @@ require 'fileutils'
 #   # 実際の移動(ファイル移動のエラーなどを事前にチェックするため一発で移動しないようにしている)
 #   clip.commit()
 class Clip
+  BASE = Config["base"].freeze
+
   # ファイル名
   attr_reader :file
 
@@ -50,7 +54,7 @@ class Clip
       FileUtils.mkdir_p(@kind)
     end
 
-    FileUtils.move("#{src_path}", "#{dest_path}")
+    FileUtils.move("#{BASE}/#{src_path}", "#{BASE}/#{dest_path}")
   end
 
   # クリップのパス
@@ -98,6 +102,6 @@ class Clip
   #    clips = Clip.clips("clips", result)
   #    # [Clip(src: clips/clip1.mp4, like: 1), Clip(src: clips/clip2.mp4, like: 10)]
   def self.clips(src, result={})
-    Dir.each_child(src).map { |file| Clip.new(src, file, result[file]) }
+    Dir.each_child("#{BASE}/#{src}").map { |file| Clip.new(src, file, result[file]) }
   end
 end

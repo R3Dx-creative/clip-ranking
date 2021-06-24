@@ -18,7 +18,7 @@ class ClipClassifierTest < Test::Unit::TestCase
 
     # config/local_config.json の base に 同階層のフォルダ test_base のパスを指定してください。
     # FIXME 手動で設定を変えないようにしたい
-    ClipClassifierCUI.run("#{Config["base"]}/1.Queue", result)
+    ClipClassifierCUI.run("1.Queue", result)
     assert_equal History.load_classified["date"], Date.today.strftime("%Y-%m-%d")
     ClipClassifierCUI.revert
   end

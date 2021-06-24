@@ -1,12 +1,13 @@
 require 'test/unit'
 
 require_relative '../../app/lib/clip'
+require_relative '../../config/config'
 
-BASE = __dir__
+BASE = Config["base"]
 
 class ClipTest < Test::Unit::TestCase
-  @@dir = "#{BASE}/test_resources"
-  @@dest = "#{BASE}/test_dest"
+  @@dir = "test_resources"
+  @@dest = "test_dest"
   @@file = (0..2).map { |i| "#{i}.txt"}
 
   def init(i, like)
@@ -71,12 +72,12 @@ class ClipTest < Test::Unit::TestCase
     clip.move!(@@dest)
     clip.commit
 
-    assert_equal Dir.children(@@dir), @@file[1..2]
-    assert_equal Dir.children(@@dest), [@@file[0]]
+    assert_equal Dir.children("#{BASE}/#{@@dir}"), @@file[1..2]
+    assert_equal Dir.children("#{BASE}/#{@@dest}"), [@@file[0]]
 
     clip = Clip.new(@@dest, @@file[0], 0)
     clip.move!(@@dir)
     clip.commit
-    assert_equal Dir.children(@@dir), @@file
+    assert_equal Dir.children("#{BASE}/#{@@dir}"), @@file
   end
 end

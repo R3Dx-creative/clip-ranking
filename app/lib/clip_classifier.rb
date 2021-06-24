@@ -50,7 +50,7 @@ module ClipClassifier
         else
           UNRANKED_FOLDER
         end
-      clip.move!("#{BASE}/#{dest}")
+      clip.move!("#{dest}")
     end
     
     clips
