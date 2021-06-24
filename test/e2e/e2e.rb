@@ -1,5 +1,6 @@
 require 'test/unit'
 
+require_relative '../.../config/config'
 require_relative '../../app/lib/clip'
 
 class EndtoEndTest < Test::Unit::TestCase
@@ -11,7 +12,22 @@ class EndtoEndTest < Test::Unit::TestCase
       { id: video.id, name: video.name, link: video.web_view_link }
     }
     videos.each(DiscordUtils.post_map)
-    JsonUtils.save("shared.json", videos)
+    GoogleDriveUtils.upload_json("shared.json", videos)
+  end
+  
+  def test_classify
+    # Queueのフォルダの仕分け
+    # POST: /classify
+    clip_hash = GoogleDriveUtils.download_json("shared.json").map{ |video| [video.id, video.name] }.to_h 
+    result = DiscordUtils.history(100).filter_map { |message| 
+      id = DiscordUtils.content_map(message.content)["id"]
+      reaction_size = message.reactions.size
+      [clip_hash[id], reaction_size] if id && clip_pool.include?(id)
+    }.to_h
+    clips = Clip.clips("#{Config["base"]}/1.Queue", result)
+    sorted = ClipClassifier.classify(clips)
+    sorted.foreach(&:commit!)
+    ClipClassifier::History.save(sorted)
   end
 
   # def test_e2e
