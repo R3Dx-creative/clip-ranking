@@ -50,8 +50,8 @@ class Clip
       return
     end
     
-    unless Dir.exist?(@kind)
-      FileUtils.mkdir_p(@kind)
+    unless Dir.exist?("#{BASE}/#{@kind}")
+      FileUtils.mkdir_p("#{BASE}/#{@kind}")
     end
 
     FileUtils.move("#{BASE}/#{src_path}", "#{BASE}/#{dest_path}")

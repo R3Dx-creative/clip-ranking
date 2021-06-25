@@ -8,7 +8,6 @@ require_relative '../../config/config'
 # +config/app_config.json+と+config/local_config.json+の設定値をもとに、+classify+メソッドでクリップを仕分ける。
 # 仕様については{README}[./README_md.html]参照。
 module ClipClassifier
-  BASE = Config["base"].freeze
   BORDER = Config["border"].freeze
   RANKING_N = Config["ranking_n"].freeze
   SRC = Config["src"].freeze
