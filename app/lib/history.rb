@@ -10,7 +10,7 @@ module History
   # [+shared_clips+] 共有した情報(id, name, link のHash)
   def self.save_shared(shared_clips)
     File.open(SHARED, "w") do |f|
-      JSON.dump(shared_array, f)
+      JSON.dump(shared_clips, f)
     end
   end
 

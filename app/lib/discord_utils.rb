@@ -21,10 +21,10 @@ module DiscordUtils
   ).freeze
 
   # Hashをメッセージにして送る
-  def self.post_map(contents_map, client=nil)
+  def self.post_map(content_map, client=nil)
     client ||= WEBHOOK_CLIENT
 
-    message = contents_map.map { |key, value| 
+    message = content_map.map { |key, value| 
       "#{key}:#{value}"
     }.join("\n")
 
@@ -35,8 +35,22 @@ module DiscordUtils
 
   # メッセージ取得する
   def self.history(amount, channel=nil)
-    client ||= WEBHOOK_CLIENT
+    channel ||= CHANNEL
 
     channel.history(amount)
+  end
+
+  def self.content_map(content)
+    fields = content.strip.split("\n")
+    mapping = fields.filter_map { |field|
+      if field.strip.empty?
+        nil
+      else
+        id, *value = field.split(":")
+        [id.strip, value.join(":").strip]
+      end
+    }.to_h
+
+    mapping
   end
 end
