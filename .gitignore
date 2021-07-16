@@ -58,3 +58,6 @@ Gemfile.lock
 # ローカルの情報
 shared.json
 classified.json
+
+## Python
+__pycache__
