@@ -49,7 +49,11 @@ class Clip:
                and self.like == other.like
 
     # TODO Python 3.9 の型ヒント
-    def clips(src, result: Optional[dict]) -> Iterator[str]:
-        return (Clip(src, file_name, result[file_name])
+    @staticmethod
+    def clips(src, result: Optional[dict]=None) -> Iterator['Clip']:
+        if result is None:
+            result = {}
+
+        return (Clip(src, file_name, result.get(file_name, 0))
                 for file_name
                 in glob.glob(f"{__BASE}/{src}"))
