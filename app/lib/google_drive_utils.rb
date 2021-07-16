@@ -19,7 +19,7 @@ module GoogleDriveUtils
     folder.files(q: ["parents in ?", folder.id])
   end
 
-  # srcからdestにファイルをすべて移動する
+  # srcからdestに動画ファイルをすべて移動する
   def self.move_all_videos(src, dest, session=nil)
     session ||= SESSION
 

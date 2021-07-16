@@ -1,17 +1,22 @@
 require 'test/unit'
 
-require_relative '../.../config/config'
+require_relative '../../config/config'
 require_relative '../../app/lib/clip'
+require_relative '../../app/lib/google_drive_utils'
+require_relative '../../app/lib/discord_utils'
+require_relative '../../app/lib/history'
 
 class EndtoEndTest < Test::Unit::TestCase
   def test_notify
     # クリップの通知とQueueへの移動
     # POST: /notify
-    GoogleDriveUtils.move_all_files("0.Shared", "1.Queue")
+    GoogleDriveUtils.move_all_videos("0.Shared", "1.Queue")
     videos = GoogleDriveUtils.videos("1.Queue").map{ |video| 
       { id: video.id, name: video.name, link: video.web_view_link }
     }
-    videos.each(DiscordUtils.post_map)
+    for video in videos
+      DiscordUtils.post_map(video)
+    end
     History.save_shared(videos)
   end
   
@@ -21,8 +26,8 @@ class EndtoEndTest < Test::Unit::TestCase
     clip_map = History.load_shared.map{ |video| [video.id, video.name] }.to_h 
     result = DiscordUtils.history(100).filter_map { |message| 
       id = DiscordUtils.content_map(message.content)["id"]
-      reaction_size = message.reactions.size
-      [clip_map[id], reaction_size] if id && clip_pool.include?(id)
+      reaction_size = message.reactions.sum(0) { |reaction| reaction.count }
+      [clip_map[id], reaction_size] if id && clip_map.include?(id)
     }.to_h
     clips = Clip.clips("1.Queue", result)
     sorted = ClipClassifier.classify(clips)
