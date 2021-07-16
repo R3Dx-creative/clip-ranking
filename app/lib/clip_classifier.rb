@@ -10,10 +10,10 @@ require_relative '../../config/config'
 module ClipClassifier
   BORDER = Config["border"].freeze
   RANKING_N = Config["ranking_n"].freeze
-  SRC = Config["src"].freeze
-  UNRANKED_FOLDER = SRC["unranked"].freeze
-  REVENGING_FOLDER = SRC["revenging"].freeze
-  RANKED_FOLDER = SRC["ranked"].freeze
+  DIR = Config["clip_dir"].freeze
+  UNRANKED_FOLDER = DIR["unranked"].freeze
+  REVENGING_FOLDER = DIR["revenging"].freeze
+  RANKED_FOLDER = DIR["ranked"].freeze
 
   # クリップを仕分けるメソッド。設定値と Clip オブジェクトの+like+をもとに+move!+まで行う
   # [+clips+] クリップ集(Clip)

@@ -1,7 +1,7 @@
 {
   "border": 5,
   "ranking_n": 3,
-  "src": {
+  "clip_dir": {
     "shared": "0.Shared",
     "queue": "1.Queue",
     "unranked": "3.Unranked",
@@ -11,5 +11,9 @@
   "history": {
     "classified": "classified.json",
     "shared": "shared.json"
+  },
+  "template": {
+    "base": "Template",
+    "break": "Break"
   }
 }

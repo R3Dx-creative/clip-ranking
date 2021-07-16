@@ -24,25 +24,27 @@ class EndtoEndTest < Test::Unit::TestCase
       reaction_size = message.reactions.size
       [clip_map[id], reaction_size] if id && clip_pool.include?(id)
     }.to_h
-    clips = Clip.clips("#{Config["base"]}/1.Queue", result)
+    clips = Clip.clips("1.Queue", result)
     sorted = ClipClassifier.classify(clips)
     sorted.foreach(&:commit!)
     History.save_classified(sorted)
   end
 
+  def test_concat
+    # クリップの結合
+    # POST: /concat
+    date = History.load_classified["date"]
+    ranked_folder = format(ClipClassifier::RANKED_FOLDER, date)
+    break_folder = Template::BREAK_FOLDER
+
+    clips = Clip.clips(ranked_folder).sort_by(&:like)
+    breaks = Clip.clips(break_folder).sort { |clip1, clip2|  clip2.file <=> clip1.file }
+    assets = breakss.zip(clips).flatten
+
+    FFmpegUtils.concat(assets)
+  end
+
   # def test_e2e
-  #   # 仕分け
-  #   # POST: /classify
-  #   clip_hash = JsonUtils.load("shared.json").map { |video| [video.id, video.name] }.to_h
-  #   result = DiscordUtils.history(100).filter_map { |message| 
-  #     id = google_drive_file_id(message.content)
-  #     reaction_size = message.reactions.size
-  #     [clip_hash[id], reaction_size] if id && clip_pool.include?(id)
-  #   }.to_h
-  #   clips = Clip.clips("1.Queue", result)
-  #   sorted = ClipClassifier.classify(clips)
-  #   sorted.foreach(&:commit!)
-  #   ClipClassifier::History.save(sorted)
 
   #   # クリップの結合
   #   # POST: editor/join?folder=[folder]
