@@ -21,7 +21,8 @@ class ClipClassifier:
         )
 
         for clip in filter(self.rule, clips):
-            for dest in filter(Dest.condition, self.dests):
-                clip.kind = dest.dest_name
+            dest = next(dest for dest in self.dests if dest.condition(clip))
+            clip.kind = dest.dest_name
+
 
         return clips
