@@ -16,13 +16,12 @@ class ClipClassifier:
 
     def classify(self, result: Optional[dict[str, int]]=None) -> list[Clip]:
         clips = sorted(
-            Clip.clips(self.src_name),
+            filter(self.rule, Clip.clips(self.src_name)),
             key=lambda clip: [-result[clip.file_name], clip.file_name]
         )
 
-        for clip in filter(self.rule, clips):
+        for clip in clips:
             dest = next(dest for dest in self.dests if dest.condition(clip))
             clip.kind = dest.dest_name
-
 
         return clips
