@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Callable, Optional, NewType
+from typing import Callable, Optional
 from clip import Clip
 
 @dataclass
