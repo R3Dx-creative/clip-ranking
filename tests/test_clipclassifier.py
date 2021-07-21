@@ -1,6 +1,8 @@
-from clipranking.clipclassifier import ClipClassifier, Dest, anyway_true
+from clipranking.ranking import Ranking, Rank
 from clipranking.clip import Clip
 from datetime import date
+
+def anyway_true(*args, **kwargs): return True
 
 def test_clipclassify():
     result = {
@@ -14,8 +16,8 @@ def test_clipclassify():
     }
 
     dests = [
-        Dest(file, condition)
-        for file, condition
+        Rank(dir, condition)
+        for dir, condition
         in {
             f"Ranked.{date.today().isoformat()}": (lambda i, _: i < 3),
             "2.Revenging": (lambda _, clip: result[clip.file] >= 5),
@@ -30,6 +32,6 @@ def test_clipclassify():
 
     assert len(clips) > 0
 
-    classifier = ClipClassifier(anyway_true, dests)
-    clips = classifier.classify(clips)
+    ranking = Ranking(anyway_true, dests)
+    clips = ranking.ranked(clips)
     print(*clips, sep="\n")
