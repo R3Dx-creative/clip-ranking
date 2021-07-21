@@ -6,5 +6,4 @@ class Config:
 
     @classmethod
     def get(cls, s):
-        print(cls.config)
         return cls.config[s]
