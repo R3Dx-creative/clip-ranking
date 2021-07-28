@@ -1,22 +1,27 @@
-from typing import Callable, Iterator, Iterable
+from typing import Callable, Iterator, Iterable, TypeVar
 
 from clipranking.clip import Clip
+
+SupportsLessThan = TypeVar("SupportsLessThan")
 
 class Ranking:
     """
     クリップ仕分け機。仕分け元のディレクトリ名と仕分け先、仕分ける対象のフィルタ条件を保持する。
     """
 
-    def __init__(self, rule: Callable[[Clip], bool],
-                 ranks: dict[str, Callable[[int, Clip], bool]]):
-        self.rule = rule
-        self.ranks = ranks
+    def __init__(self,
+                 filter_key: Callable[[Clip], bool],
+                 sort_key: Callable[[Clip], SupportsLessThan],
+                 rules: dict[str, Callable[[int, Clip], bool]]):
+        self.filter_key = filter_key
+        self.sort_key = sort_key
+        self.rules = rules
 
     def ranked(self, clips: Iterable[Clip]) -> Iterator[Clip]:
-        for i, clip in enumerate(filter(self.rule, clips)):
+        for i, clip in enumerate(sorted(filter(self.filter_key, clips), key=self.sort_key)):
             clip.dest = next(dir
                 for dir, condition
-                in self.ranks.items()
+                in self.rules.items()
                 if condition(i, clip)
             )
             yield clip
