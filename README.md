@@ -10,7 +10,7 @@ It is in develop yet.
 
 ## Classification rules
 
-Users can set their rules for classification of clips (in main.py so far. It will be changed to original DSL).
+Users can set their rules for classification of clips (in main.py so far. It will be changed to DSL for this system).
 
 ```py
 {
