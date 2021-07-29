@@ -30,16 +30,16 @@ These rules are applied in order from the top.
 
 ## Aggregate
 
-Users can extend to use their favorite way to aggregate reactions that are attached on clips by implementating `Aggregate` protocol.
+Users can extend to use their favorite way to aggregate reactions that are attached on clips by implementing `Aggregate` protocol.
 
 ## Storage
 
-Users can extend to use their favorite storage service by implementating `Storage` protocol.
+Users can extend to use their favorite storage service by implementing `Storage` protocol.
 
 So far, this project will support local file system and Google Drive.
 
 ## Notice
 
-Users can extend to use their favorite communication tool service by implementating `Notice` protocol.
+Users can extend to use their favorite communication tool service by implementing `Notice` protocol.
 
 So far, this project will support Discord.
