@@ -2,11 +2,11 @@
 
 A system for game clips in closed friend community.
 
-It notify game clips, aggregate reactions on them, classify and concatenate them.
+It notify new game clips, aggregate reactions on them, classify and concatenate them.
 
-Also, users can set their ways.
+Also, users can implement particular ways to do.
 
-It is in develop yet.
+This system is in develop yet.
 
 # Features
 
@@ -32,16 +32,16 @@ These rules are applied in order from the top.
 
 ## Aggregate
 
-Users can extend to use their favorite way to aggregate reactions that are attached on clips by implementing `Aggregate` protocol.
+Users can extend to use their particular way to aggregate reactions that are attached on clips by implementing `Aggregate` protocol.
 
 ## Storage
 
-Users can extend to use their favorite storage service by implementing `Storage` protocol.
+Users can extend to use their particular storage service by implementing `Storage` protocol.
 
 So far, this project will support local file system and Google Drive.
 
 ## Notice
 
-Users can extend to use their favorite communication service by implementing `Notice` protocol.
+Users can extend to use their particular communication service by implementing `Notice` protocol.
 
 So far, this project will support Discord.
