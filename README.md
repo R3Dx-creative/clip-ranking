@@ -1,35 +1,45 @@
 # clip-ranking
 
-みんなのクリップランキング化システム
+A system for game clips in closed friend community.
 
-## 概要
+It aggregate reactions, notify, classification and concatenate game clips.
 
-ゲームクリップの収集、ランキング化、クリップ結合、動画投稿までの自動化
+It is in develop yet.
 
-## 流れ
+# Features
 
-#### 好きなクリップを共有フォルダに保存
+## Classification rules
 
-切り抜き、保存までは手動。
+Users can set their rules for classification of clips (in main.py so far. It will be changed to original DSL).
 
-* 共有フォルダ
-    * 0.Shared
-        * 最初に保存するところ。
-    * 1.Queue
-        * 集計候補。ここからリンクを送信する。
-    * 2.Revenging
-        * ランキングに入らなかったけどアクション数が多かったやつ。
-    * 99.Unranked
-        * ランキングに入らなかったやつ。
-    * Ranked.[date] ...
-        * ランキングに入ったやつ
+```py
+{
+    f"Ranked.{date.today().isoformat()}": (lambda i, _: i < 3),
+    "2.Revenging": (lambda _, clip: clip.like >= 5),
+    "Unranked": anyway_true
+}
+```
 
-#### 「今日のクリップ」通知。
-1. 1.Queueフォルダの動画リンクをDiscordのチャンネルに送信。(API)
+This example means following.
 
-#### 「ランキング」通知。投稿。
-1. アクション数を集計。ランキング化。(集計の頻度は要検討)
-    * Ranked.[date]のフォルダを作成し、トップ5までそこに移動。
-    * アクション数が??未満なら99.Unrankedに移動。
-    * アクション数が??以上なら2.Revengingに移動。
-2. Ranked.[date]内のクリップをつなげて投稿。
+1. Up to the third clips will be moved to "Ranked.[today]" folder.
+2. Clips with 5 or more likes will be moved to "2.Revenging" folder.
+3. The other clips will be moved to "Unranked" folder.
+
+These rules are applied in order from the top.
+
+## Aggregate
+
+Users can extend to use their favorite way to aggregate reactions that are attached on clips by implementation `Aggregate` protocol.
+
+## Storage
+
+Users can extend to use their favorite storage service by implementation `Storage` protocol.
+
+So far, this project will support local file system and Google Drive.
+
+## Notice
+
+Users can extend to use their favorite communication tool service by implementation `Notice` protocol.
+
+So far, this project will support Discord.

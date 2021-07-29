@@ -17,7 +17,7 @@ def test_ranking():
 
     rules = {
         f"Ranked.{date.today().isoformat()}": (lambda i, _: i < 3),
-        "2.Revenging": (lambda _, clip: result[clip.file] >= 5),
+        "2.Revenging": (lambda _, clip: clip.like >= 5),
         "Unranked": anyway_true
     }
 
@@ -25,7 +25,7 @@ def test_ranking():
 
     assert len(clips) > 0
 
-    ranking = Ranking(anyway_true, lambda clip: [-result[clip.file], clip.file], rules)
+    ranking = Ranking(anyway_true, lambda clip: [-clip.like, clip.file], rules)
 
     actual = list(ranking.ranked(clips))
 
