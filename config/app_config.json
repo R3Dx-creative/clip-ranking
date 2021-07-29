@@ -15,5 +15,6 @@
   "template": {
     "base": "Template",
     "break": "Break"
-  }
+  },
+  "storage_type": "local"
 }

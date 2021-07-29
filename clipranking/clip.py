@@ -1,12 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, Iterator
-import os
-import shutil
-import pathlib
 
-from config import Config
-
-_BASE = Config.get("base")
+from .storage import storage
 
 @dataclass
 class Clip:
@@ -31,10 +26,10 @@ class Clip:
         if self.dir == self.dest:
             return
         
-        if not os.path.exists(f"{_BASE}/{self.dest}"):
-            os.makedirs(f"{_BASE}/{self.dest}")
+        if not storage.exists(self.dest):
+            storage.makedirs(self.dest)
         
-        shutil.move(f"{_BASE}/{self.src_path}", f"{_BASE}/{self.dest_path}")
+        storage.move(self.src_path, self.dest_path)
 
     def __str__(self):
         base = f"Clip(src: {self.src_path}, like: {self.like})"
@@ -54,7 +49,7 @@ class Clip:
             result = {}
 
         return (
-            Clip(dir, file.name, result.get(file.name, 0))
+            Clip(dir, file, result.get(file, 0))
             for file
-            in pathlib.Path(f"{_BASE}/{dir}").glob(f"*")
+            in storage.glob(dir, "*")
         )
