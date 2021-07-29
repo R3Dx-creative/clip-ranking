@@ -2,7 +2,9 @@
 
 A system for game clips in closed friend community.
 
-It aggregate reactions, notify, classify and concatenate game clips.
+It notify game clips, aggregate reactions on them, classify and concatenate them.
+
+Also, users can set their ways.
 
 It is in develop yet.
 
