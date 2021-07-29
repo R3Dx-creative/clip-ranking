@@ -40,6 +40,6 @@ So far, this project will support local file system and Google Drive.
 
 ## Notice
 
-Users can extend to use their favorite communication tool service by implementing `Notice` protocol.
+Users can extend to use their favorite communication service by implementing `Notice` protocol.
 
 So far, this project will support Discord.
