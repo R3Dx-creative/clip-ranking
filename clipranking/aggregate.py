@@ -1,5 +1,5 @@
-from abc import ABC
+from typing import Protocol
 
-class Aggregate(ABC):
+class Aggregate(Protocol):
     def aggregate(self):
         ...

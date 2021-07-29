@@ -1,5 +1,5 @@
-from abc import ABC
+from typing import Protocol
 
-class Notice(ABC):
+class Notice(Protocol):
     def notify(self, content):
         ...
