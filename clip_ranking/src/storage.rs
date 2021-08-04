@@ -1,5 +1,3 @@
-use std::fs;
-use std::io;
 use std::error::Error;
 use glob;
 
@@ -21,3 +19,4 @@ impl Storage for LocalStorage {
         glob::glob(pattern)
     }
 }
+
