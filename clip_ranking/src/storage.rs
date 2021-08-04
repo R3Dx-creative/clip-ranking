@@ -1,19 +1,23 @@
 use std::fs;
 use std::io;
+use std::error::Error;
 use glob;
 
 pub trait Storage
 where
-    Self::Files: Iterator
+    Self::Files: Iterator,
+    Self::StorageError: Error
 {
     type Files;
-    fn glob(&self, dir: &str, pattern: &str) -> io::Result<Self::Files>;
+    type StorageError;
+    fn glob(&self, pattern: &str) -> Result<Self::Files, Self::StorageError>;
 }
 
-struct LocalStorage {}
+pub struct LocalStorage {}
 impl Storage for LocalStorage {
-    type Files = ;
-    fn glob(&self, dir: &str, pattern: &str) -> io::Result<Self::Files> {
-        fs::read_dir(dir)
+    type Files = glob::Paths;
+    type StorageError = glob::PatternError;
+    fn glob(&self, pattern: &str) -> Result<Self::Files, glob::PatternError> {
+        glob::glob(pattern)
     }
 }

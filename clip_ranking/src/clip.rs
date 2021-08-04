@@ -21,5 +21,7 @@ impl Clip {
     } 
 }
 
-pub fn clips<I>(dir: &str) -> I where I: Iterator {
+pub fn clips<S>(storage: S, dir: &str) -> Result<S::Files, S::StorageError> where S: Storage {
+    let pattern = dir.to_string() + "/*";
+    storage.glob(pattern.as_str())
 }
