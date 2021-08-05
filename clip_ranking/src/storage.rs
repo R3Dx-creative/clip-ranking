@@ -1,30 +1,48 @@
-use std::error::Error;
 use glob;
+use std::error::Error;
+use std::fmt;
 use std::path::PathBuf;
+
+#[derive(Debug)]
+pub struct PatternError {
+    msg: String
+}
+
+impl fmt::Display for PatternError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Pattern error: {}", self.msg)
+    }
+}
+
+impl Error for PatternError {}
 
 pub trait Storage
 where
-    Self::PatternError: Error,
-    Self::Paths: Iterator<Item=Self::Entry>
+    Self::Items: Iterator<Item=Self::Item>
 {
-    type PatternError;
-    type Paths;
-    type Entry;
-    fn glob(&self, pattern: &str) -> Result<Self::Paths, Self::PatternError>;
-    fn to_path(&self, entry: Self::Entry) -> Option<PathBuf>;
+    type Items;
+    type Item;
+    fn glob(&self, pattern: &str) -> Result<Self::Items, PatternError>;
+    fn path(&self, item: Self::Item) -> Option<PathBuf>;
 }
 
 pub struct LocalStorage {}
+
 impl Storage for LocalStorage {
-    type PatternError = glob::PatternError;
-    type Paths = glob::Paths;
-    type Entry = glob::GlobResult;
-    fn glob(&self, pattern: &str) -> Result<glob::Paths, glob::PatternError> {
-        glob::glob(pattern)
+    type Items = glob::Paths;
+    type Item = glob::GlobResult;
+    fn glob(&self, pattern: &str) -> Result<glob::Paths, PatternError> {
+        match glob::glob(pattern) {
+            Err(glob::PatternError { pos, msg }) => {
+                let msg = format!("pos: {}, msg: {}", pos, msg);
+                Err(PatternError { msg: msg })
+            },
+            Ok(paths) => Ok(paths)
+        }
     }
 
-    fn to_path(&self, entry: glob::GlobResult) -> Option<PathBuf> {
-        match entry {
+    fn path(&self, item: glob::GlobResult) -> Option<PathBuf> {
+        match item {
             Ok(e) => Some(e),
             _ => None
         }

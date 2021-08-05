@@ -1,4 +1,4 @@
-use crate::storage::{ Storage };
+use crate::storage::{ Storage, PatternError };
 
 pub struct Clip {
     pub dir: String,
@@ -25,16 +25,16 @@ impl Clip {
     } 
 }
 
-pub fn clips<S>(storage: S, dir: &str) -> Result<Vec<Clip>, S::PatternError> where S: Storage {
+pub fn clips<S>(storage: S, dir: &str) -> Result<Vec<Clip>, PatternError> where S: Storage {
     let pattern = dir.to_string() + "/*";
-    let paths = storage.glob(pattern.as_str())?;
+    let items = storage.glob(pattern.as_str())?;
 
-    let clips = paths
-        .filter_map(|entry| { 
-            let path = storage.to_path(entry)?;
+    let clips = items
+        .filter_map(|item| { 
+            let path = storage.path(item)?;
             path.file_name()
-                .and_then(|file_name| file_name.to_str())
-                .map(|file_name| Clip::new(dir, file_name))
+                .and_then(|name| name.to_str())
+                .map(|name| Clip::new(dir, name))
         })
         .collect();
 
