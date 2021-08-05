@@ -19,10 +19,10 @@ mod test {
     fn test_clip_local_storage() {
         let storage = storage::LocalStorage{};
         let clips = clip::clips(storage, "tests/resources").unwrap();
-        for (i, entry) in clips.enumerate() {
+        for (i, clip) in clips.iter().enumerate() {
             assert_eq!(
-                format!("{}.txt", i),
-                entry.unwrap().file_name().unwrap().to_str().unwrap()
+                format!("tests/resources/{}.txt", i),
+                clip.src_path()
             );
         }
     }
