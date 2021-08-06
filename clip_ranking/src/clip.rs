@@ -25,13 +25,13 @@ impl Clip {
     } 
 }
 
-pub fn clips<S>(storage: &'static S, dir: &'static str, pattern: &str) -> Result<impl Iterator<Item=Clip>, PatternError> where S: Storage {
+pub fn clips<S>(storage: &S, dir: &'static str, pattern: &str) -> Result<impl Iterator<Item=Clip>, PatternError> where S: Storage {
     let pattern = dir.to_string() + "/" + pattern;
     let items = storage.glob(pattern.as_str())?;
 
     let clips = items
         .filter_map(move |item| { 
-            let path = storage.path(item)?;
+            let path = S::path(item)?;
             path.file_name()
                 .and_then(|name| name.to_str())
                 .map(|name| Clip::new(&dir, name))

@@ -24,7 +24,7 @@ where
     type Item;
     
     fn glob(&self, pattern: &str) -> Result<Self::Items, PatternError>;
-    fn path(&self, item: Self::Item) -> Option<PathBuf>;
+    fn path(item: Self::Item) -> Option<PathBuf>;
 }
 
 pub struct LocalStorage {}
@@ -43,7 +43,7 @@ impl Storage for LocalStorage {
         }
     }
 
-    fn path(&self, item: glob::GlobResult) -> Option<PathBuf> {
+    fn path(item: glob::GlobResult) -> Option<PathBuf> {
         match item {
             Ok(path) => Some(path),
             Err(e) => panic!(e)
@@ -51,3 +51,27 @@ impl Storage for LocalStorage {
     }
 }
 
+pub struct GoogleDrive {}
+
+/// とりあえずLocalStorageと同じ内容
+impl Storage for GoogleDrive {
+    type Items = glob::Paths;
+    type Item = glob::GlobResult;
+
+    fn glob(&self, pattern: &str) -> Result<glob::Paths, PatternError> {
+        match glob::glob(pattern) {
+            Err(glob::PatternError { pos, msg }) => {
+                let msg = format!("pos: {}, msg: {}", pos, msg);
+                Err(PatternError { msg: msg })
+            },
+            Ok(paths) => Ok(paths)
+        }
+    }
+
+    fn path(item: glob::GlobResult) -> Option<PathBuf> {
+        match item {
+            Ok(path) => Some(path),
+            Err(e) => panic!(e)
+        }
+    }
+}
