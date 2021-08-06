@@ -22,6 +22,7 @@ where
 {
     type Items;
     type Item;
+    
     fn glob(&self, pattern: &str) -> Result<Self::Items, PatternError>;
     fn path(&self, item: Self::Item) -> Option<PathBuf>;
 }
@@ -31,6 +32,7 @@ pub struct LocalStorage {}
 impl Storage for LocalStorage {
     type Items = glob::Paths;
     type Item = glob::GlobResult;
+
     fn glob(&self, pattern: &str) -> Result<glob::Paths, PatternError> {
         match glob::glob(pattern) {
             Err(glob::PatternError { pos, msg }) => {
@@ -43,8 +45,8 @@ impl Storage for LocalStorage {
 
     fn path(&self, item: glob::GlobResult) -> Option<PathBuf> {
         match item {
-            Ok(e) => Some(e),
-            _ => None
+            Ok(path) => Some(path),
+            Err(e) => panic!(e)
         }
     }
 }

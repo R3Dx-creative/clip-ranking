@@ -25,18 +25,17 @@ impl Clip {
     } 
 }
 
-pub fn clips<S>(storage: S, dir: &str) -> Result<Vec<Clip>, PatternError> where S: Storage {
-    let pattern = dir.to_string() + "/*";
+pub fn clips<S>(storage: &'static S, dir: &'static str, pattern: &str) -> Result<impl Iterator<Item=Clip>, PatternError> where S: Storage {
+    let pattern = dir.to_string() + "/" + pattern;
     let items = storage.glob(pattern.as_str())?;
 
     let clips = items
-        .filter_map(|item| { 
+        .filter_map(move |item| { 
             let path = storage.path(item)?;
             path.file_name()
                 .and_then(|name| name.to_str())
-                .map(|name| Clip::new(dir, name))
-        })
-        .collect();
+                .map(|name| Clip::new(&dir, name))
+        });
 
     Ok(clips)
 }

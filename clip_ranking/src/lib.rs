@@ -6,6 +6,8 @@ pub mod config;
 mod test {
     use super::*;
 
+    static STORAGE: storage::LocalStorage = storage::LocalStorage{};
+
     #[test]
     fn test_config() {
         let config = &config::CONFIG;
@@ -17,9 +19,8 @@ mod test {
 
     #[test]
     fn test_clip_local_storage() {
-        let storage = storage::LocalStorage{};
-        let clips = clip::clips(storage, "tests/resources").unwrap();
-        for (i, clip) in clips.iter().enumerate() {
+        let clips = clip::clips(&STORAGE, "tests/resources", "*").unwrap();
+        for (i, clip) in clips.enumerate() {
             assert_eq!(
                 format!("tests/resources/{}.txt", i),
                 clip.src_path()
