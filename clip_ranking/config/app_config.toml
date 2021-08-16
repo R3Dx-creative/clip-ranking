@@ -1,1 +1,1 @@
-storage_type = 'local'
+shared_dir = '0.shared'

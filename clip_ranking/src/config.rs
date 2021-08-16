@@ -6,7 +6,7 @@ use std::env;
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
-    pub storage_type: String,
+    pub shared_dir: String,
     pub base_dir: String
 }
 

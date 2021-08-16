@@ -27,6 +27,13 @@ where
     fn path(item: Self::Item) -> Option<PathBuf>;
 }
 
+pub fn search<S>(storage: &S, dir: &str, pattern: &str) -> Result<impl Iterator<Item=PathBuf>, PatternError> where S: Storage {
+    let pattern = dir.to_string() + "/" + pattern;
+    let items = storage.glob(pattern.as_str())?;
+    let clips = items.filter_map(|item| S::path(item));
+    Ok(clips)
+}
+
 pub struct LocalStorage {}
 
 impl Storage for LocalStorage {
