@@ -10,11 +10,37 @@ pub struct PatternError {
 
 impl fmt::Display for PatternError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Pattern error: {}", self.msg)
+        write!(f, "pattern error: {}", self.msg)
     }
 }
 
 impl Error for PatternError {}
+
+#[derive(Debug)]
+pub struct ParsePathBufError {
+    msg: String
+}
+
+impl fmt::Display for ParsePathBufError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "parse path error: {}", self.msg)
+    }
+}
+
+impl Error for ParsePathBufError {}
+
+#[derive(Debug)]
+pub struct SearchError {
+    msg: String
+}
+
+impl fmt::Display for SearchError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "search error: {}", self.msg)
+    }
+}
+
+impl Error for SearchError {}
 
 pub trait Storage
 where
@@ -24,13 +50,16 @@ where
     type Item;
     
     fn glob(&self, pattern: &str) -> Result<Self::Items, PatternError>;
-    fn path(item: Self::Item) -> Option<PathBuf>;
+    fn path(item: Self::Item) -> Result<PathBuf, ParsePathBufError>;
 }
 
-pub fn search<S>(storage: &S, dir: &str, pattern: &str) -> Result<impl Iterator<Item=PathBuf>, PatternError> where S: Storage {
+pub fn search<S>(storage: &S, dir: &str, pattern: &str) -> Result<impl Iterator<Item=PathBuf>, SearchError> where S: Storage {
     let pattern = dir.to_string() + "/" + pattern;
-    let items = storage.glob(pattern.as_str())?;
-    let clips = items.filter_map(|item| S::path(item));
+    let items = match storage.glob(pattern.as_str()) {
+        Ok(items) => Ok(items),
+        Err(err) => Err(SearchError { msg: err.msg })
+    }?;
+    let clips = items.flat_map(|item| S::path(item));
     Ok(clips)
 }
 
@@ -50,10 +79,10 @@ impl Storage for LocalStorage {
         }
     }
 
-    fn path(item: glob::GlobResult) -> Option<PathBuf> {
+    fn path(item: glob::GlobResult) -> Result<PathBuf, ParsePathBufError> {
         match item {
-            Ok(path) => Some(path),
-            Err(e) => panic!(e)
+            Ok(path) => Ok(path),
+            Err(err) => Err(ParsePathBufError { msg: err.to_string() })
         }
     }
 }
@@ -75,10 +104,10 @@ impl Storage for GoogleDrive {
         }
     }
 
-    fn path(item: glob::GlobResult) -> Option<PathBuf> {
+    fn path(item: glob::GlobResult) -> Result<PathBuf, ParsePathBufError> {
         match item {
-            Ok(path) => Some(path),
-            Err(e) => panic!(e)
+            Ok(path) => Ok(path),
+            Err(err) => Err(ParsePathBufError { msg: err.to_string() })
         }
     }
 }
