@@ -3,6 +3,33 @@ use std::error::Error;
 use std::fmt;
 use std::path::PathBuf;
 
+// ===--- trait ---===
+pub trait Storage
+where
+    Self::Item: ToPathBuf,
+    Self::Items: Iterator<Item=Self::Item>
+{
+    type Items;
+    type Item;
+    
+    fn glob(&self, pattern: &str) -> Result<Self::Items, PatternError>;
+}
+
+pub trait ToPathBuf {
+    fn to_path(self) -> Result<PathBuf, ToPathBufError>;
+}
+
+pub fn search<S>(storage: &S, dir: &str, pattern: &str) -> Result<impl Iterator<Item=PathBuf>, SearchError> where S: Storage {
+    let pattern = dir.to_string() + "/" + pattern;
+    let items = match storage.glob(pattern.as_str()) {
+        Ok(items) => Ok(items),
+        Err(err) => Err(SearchError { msg: err.msg })
+    }?;
+    let paths = items.flat_map(|item| item.to_path());
+    Ok(paths)
+}
+
+// ===--- error ---===
 #[derive(Debug)]
 pub struct PatternError {
     msg: String
@@ -17,17 +44,17 @@ impl fmt::Display for PatternError {
 impl Error for PatternError {}
 
 #[derive(Debug)]
-pub struct ParsePathBufError {
+pub struct ToPathBufError {
     msg: String
 }
 
-impl fmt::Display for ParsePathBufError {
+impl fmt::Display for ToPathBufError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "parse path error: {}", self.msg)
     }
 }
 
-impl Error for ParsePathBufError {}
+impl Error for ToPathBufError {}
 
 #[derive(Debug)]
 pub struct SearchError {
@@ -42,25 +69,14 @@ impl fmt::Display for SearchError {
 
 impl Error for SearchError {}
 
-pub trait Storage
-where
-    Self::Items: Iterator<Item=Self::Item>
-{
-    type Items;
-    type Item;
-    
-    fn glob(&self, pattern: &str) -> Result<Self::Items, PatternError>;
-    fn path(item: Self::Item) -> Result<PathBuf, ParsePathBufError>;
-}
-
-pub fn search<S>(storage: &S, dir: &str, pattern: &str) -> Result<impl Iterator<Item=PathBuf>, SearchError> where S: Storage {
-    let pattern = dir.to_string() + "/" + pattern;
-    let items = match storage.glob(pattern.as_str()) {
-        Ok(items) => Ok(items),
-        Err(err) => Err(SearchError { msg: err.msg })
-    }?;
-    let clips = items.flat_map(|item| S::path(item));
-    Ok(clips)
+// ===--- implementation ---===
+impl ToPathBuf for glob::GlobResult {
+    fn to_path(self) -> Result<PathBuf, ToPathBufError> {
+        match self {
+            Ok(path) => Ok(path),
+            Err(err) => Err(ToPathBufError { msg: err.to_string() })
+        }
+    }
 }
 
 pub struct LocalStorage {}
@@ -76,13 +92,6 @@ impl Storage for LocalStorage {
                 Err(PatternError { msg: msg })
             },
             Ok(paths) => Ok(paths)
-        }
-    }
-
-    fn path(item: glob::GlobResult) -> Result<PathBuf, ParsePathBufError> {
-        match item {
-            Ok(path) => Ok(path),
-            Err(err) => Err(ParsePathBufError { msg: err.to_string() })
         }
     }
 }
@@ -101,13 +110,6 @@ impl Storage for GoogleDrive {
                 Err(PatternError { msg: msg })
             },
             Ok(paths) => Ok(paths)
-        }
-    }
-
-    fn path(item: glob::GlobResult) -> Result<PathBuf, ParsePathBufError> {
-        match item {
-            Ok(path) => Ok(path),
-            Err(err) => Err(ParsePathBufError { msg: err.to_string() })
         }
     }
 }
