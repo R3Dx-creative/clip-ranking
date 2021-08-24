@@ -3,7 +3,7 @@ pub mod config;
 
 #[cfg(test)]
 mod test {
-    use std::path::Path;
+    use std::path::{ Path };
     use super::*;
 
     #[test]
