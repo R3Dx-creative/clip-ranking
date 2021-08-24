@@ -16,7 +16,7 @@ mod test {
     #[test]
     fn test_local_storage() {
         let storage = storage::LocalStorage{};
-        let clips = storage::search(&storage, "tests/resources", "*").unwrap();
+        let clips = storage::search(&storage, "tests/resources/*").unwrap();
         for (i, clip) in clips.enumerate() {
             assert_eq!(
                 Path::new(&format!("tests/resources/{}.txt", i)),
@@ -28,7 +28,7 @@ mod test {
     #[test]
     fn test_google_drive() {
         let storage = storage::GoogleDrive{};
-        let clips = storage::search(&storage, "tests/resources", "*").unwrap();
+        let clips = storage::search(&storage, "tests/resources/*").unwrap();
         for (i, clip) in clips.enumerate() {
             assert_eq!(
                 Path::new(&format!("tests/resources/{}.txt", i)),
