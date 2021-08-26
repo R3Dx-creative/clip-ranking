@@ -20,7 +20,7 @@ pub fn ship<S: s::Storage>(storage: &S, shipments: Vec<Shipment>) -> io::Result<
         })
         .map(|(path, mut dst_dir, file_name)| {
             if !storage.exists(&dst_dir) {
-                storage.create_parents(&dst_dir)?;
+                storage.create_all_dirs(&dst_dir)?;
             }
             dst_dir.push(file_name);
             println!("rename {:} to {:}", path.display(), dst_dir.display());
