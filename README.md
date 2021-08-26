@@ -1,8 +1,8 @@
 # clip-ranking
 
-A system for game clips in closed friend community.
+A system for interesting files for closed friend community.
 
-It notify new game clips in paticular storage, aggregate reactions on them, classify and concatenate them.
+For example, it notify game clips to Discord and aggregate reactions on them, and sort them.
 
 Also, users can implement particular ways to do them.
 
@@ -10,38 +10,48 @@ This system is in develop yet.
 
 # Features
 
-## Classification rules
-
-Users can set their rules for classification of clips (in main.py so far. It will be changed to DSL for this system).
-
-```py
-{
-    f"Ranked.{date.today().isoformat()}": (lambda i, _: i < 3),
-    "2.Revenging": (lambda _, clip: clip.like >= 5),
-    "Unranked": anyway_true
-}
-```
-
-This example means following.
-
-1. Up to the third clips will be moved to "Ranked.[today]" folder.
-2. Clips with 5 or more likes will be moved to "2.Revenging" folder.
-3. The other clips will be moved to "Unranked" folder.
-
-These rules are applied in order from the top.
-
-## Aggregate
-
-Users can extend to use their particular way to aggregate reactions that are attached on clips by implementing `Aggregate` protocol.
-
 ## Storage
 
 Users can extend to use their particular storage service by implementing `Storage` protocol.
 
 So far, this project will support local file system and Google Drive.
 
+## Rules for Sorting
+
+Users can set their rules for sorting of files according weight. (info to sort file is called "Shipment")
+
+```rust
+let weights: HashMap<&str, i32> = [("0.txt", 4), ("1.txt", 6), ("2.txt", 3), ("3.txt", 5)].iter().cloned().collect();
+
+let shipments = shipment::sorted_shipments(items.into_iter(), &weights,
+    |(i, (item, &weight))| {
+        if i < 2 {
+            shipment::Shipment(item, "A".to_string())
+        } else if weight > 3 {
+            shipment::Shipment(item, "B".to_string())
+        } else {
+            shipment::Shipment(item, "C".to_string())
+        }
+    }
+);
+
+shipment::ship(&storage, shipments).unwrap();
+```
+
+This example means following.
+
+1. Up to the second clips will be moved to "A" folder.
+2. Files with 5 or more weights will be moved to "B" folder.
+3. The other clips will be moved to "Unranked" folder.
+
+These rules are applied in order from the top.
+
 ## Notice
 
 Users can extend to use their particular communication service by implementing `Notice` protocol.
 
 So far, this project will support Discord.
+
+## Aggregate
+
+Users can extend to use their particular way to aggregate reactions that are attached on clips by implementing `Aggregate` protocol.
