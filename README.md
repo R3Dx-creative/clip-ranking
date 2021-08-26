@@ -18,7 +18,7 @@ So far, this project will support local file system and Google Drive.
 
 ## Rules for Sorting
 
-Users can set their rules for sorting of files according weight. (info to sort file is called "Shipment")
+Users can set their rules for sorting of items according weight. (info to sort item is called "Shipment")
 
 ```rust
 let weights: HashMap<&str, i32> = [("0.txt", 4), ("1.txt", 6), ("2.txt", 3), ("3.txt", 5)].iter().cloned().collect();
@@ -40,9 +40,9 @@ shipment::ship(&storage, shipments).unwrap();
 
 This example means following.
 
-1. Up to the second clips will be moved to "A" folder.
-2. Files with 5 or more weights will be moved to "B" folder.
-3. The other clips will be moved to "C" folder.
+1. Up to the second items will be moved to "A" folder.
+2. items with 5 or more weights will be moved to "B" folder.
+3. The other items will be moved to "C" folder.
 
 These rules are applied in order from the top.
 
@@ -54,4 +54,4 @@ So far, this project will support Discord.
 
 ## Aggregate
 
-Users can extend to use their particular way to aggregate reactions that are attached on clips by implementing `Aggregate` protocol.
+Users can extend to use their particular way to aggregate reactions that are attached on items by implementing `Aggregate` protocol.
