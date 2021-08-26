@@ -14,7 +14,7 @@ This system is in develop yet.
 
 Users can extend to use their particular storage service by implementing `Storage` protocol.
 
-So far, this project plan to local file system and Google Drive.
+So far, this project plan to support local file system and Google Drive.
 
 ## Rules for Sorting
 
