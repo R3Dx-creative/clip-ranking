@@ -42,7 +42,7 @@ This example means following.
 
 1. Up to the second clips will be moved to "A" folder.
 2. Files with 5 or more weights will be moved to "B" folder.
-3. The other clips will be moved to "Unranked" folder.
+3. The other clips will be moved to "C" folder.
 
 These rules are applied in order from the top.
 
