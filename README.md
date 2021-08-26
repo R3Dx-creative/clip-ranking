@@ -1,6 +1,6 @@
 # clip-ranking
 
-A system for interesting files for closed friend community.
+A system for interesting items for closed friend community.
 
 For example, it notify game clips to Discord and aggregate reactions on them, and sort them.
 
@@ -14,7 +14,7 @@ This system is in develop yet.
 
 Users can extend to use their particular storage service by implementing `Storage` protocol.
 
-So far, this project will support local file system and Google Drive.
+So far, this project plan to local file system and Google Drive.
 
 ## Rules for Sorting
 
@@ -44,13 +44,11 @@ This example means following.
 2. items with 5 or more weights will be moved to "B" folder.
 3. The other items will be moved to "C" folder.
 
-These rules are applied in order from the top.
-
 ## Notice
 
 Users can extend to use their particular communication service by implementing `Notice` protocol.
 
-So far, this project will support Discord.
+So far, this project plan to support Discord.
 
 ## Aggregate
 
