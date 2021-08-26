@@ -23,8 +23,10 @@ pub fn ship<S: s::Storage>(storage: &S, shipments: Vec<Shipment>) -> io::Result<
                 storage.create_all_dirs(&dst_dir)?;
             }
             dst_dir.push(file_name);
-            println!("rename {:} to {:}", path.display(), dst_dir.display());
-            storage.rename(path, dst_dir)
+
+            let new_path = dst_dir;
+            println!("rename {:} to {:}", path.display(), new_path.display());
+            storage.rename(path, new_path)
         })
         .collect()
 }
