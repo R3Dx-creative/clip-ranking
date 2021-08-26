@@ -1,7 +1,9 @@
 use glob;
 use std::error::Error;
 use std::fmt;
-use std::path::PathBuf;
+use std::fs;
+use std::path::{ Path, PathBuf };
+use std::io;
 
 // ===--- trait ---===
 pub trait Storage
@@ -13,13 +15,16 @@ where
     type Item;
     
     fn glob(&self, pattern: &str) -> Result<Self::Items, PatternError>;
+    fn exists<P: AsRef<Path>>(&self, item: P) -> bool;
+    fn create_parents<P: AsRef<Path>>(&self, path: P) -> io::Result<()>;
+    fn rename<P: AsRef<Path>, Q: AsRef<Path>>(&self, from: P, to: Q) -> io::Result<()>;
 }
 
 pub trait ToPathBuf {
     fn to_path(self) -> Result<PathBuf, ToPathBufError>;
 }
 
-pub fn search<S>(storage: &S, pattern: &str) -> Result<impl Iterator<Item=PathBuf>, PatternError> where S: Storage {
+pub fn search<S: Storage>(storage: &S, pattern: &str) -> Result<impl Iterator<Item=PathBuf>, PatternError> {
     let items = storage.glob(pattern)?;
     let paths = items.flat_map(|item| item.to_path());
     Ok(paths)
@@ -74,21 +79,33 @@ impl Storage for LocalStorage {
             Ok(paths) => Ok(paths)
         }
     }
-}
 
-pub struct GoogleDrive {}
+    fn exists<P: AsRef<Path>>(&self, path: P) -> bool {
+        path.as_ref().exists()
+    }
 
-/// とりあえずLocalStorageと同じ内容
-impl Storage for GoogleDrive {
-    type Items = glob::Paths;
-    type Item = glob::GlobResult;
+    fn create_parents<P: AsRef<Path>>(&self, path: P) -> io::Result<()> {
+        fs::create_dir_all(path)
+    }
 
-    fn glob(&self, pattern: &str) -> Result<glob::Paths, PatternError> {
-        match glob::glob(pattern) {
-            Err(glob::PatternError { pos: _, msg }) => {
-                Err(PatternError { msg: msg })
-            },
-            Ok(paths) => Ok(paths)
-        }
+    fn rename<P: AsRef<Path>, Q: AsRef<Path>>(&self, from: P, to: Q) -> io::Result<()> {
+        fs::rename(from, to)
     }
 }
+
+// pub struct GoogleDrive {}
+
+// /// とりあえずLocalStorageと同じ内容
+// impl Storage for GoogleDrive {
+//     type Items = glob::Paths;
+//     type Item = glob::GlobResult;
+
+//     fn glob(&self, pattern: &str) -> Result<glob::Paths, PatternError> {
+//         match glob::glob(pattern) {
+//             Err(glob::PatternError { pos: _, msg }) => {
+//                 Err(PatternError { msg: msg })
+//             },
+//             Ok(paths) => Ok(paths)
+//         }
+//     }
+// }
