@@ -18,7 +18,7 @@ So far, this project plan to support local file system and Google Drive by defau
 
 ## Rules for Sorting
 
-Users can set their rules for sorting weighted items. (info to sort item is called "Shipment")
+Users can set their rules for sorting weighted items. (Sorted items that is going to store into a storage is called "Shipment")
 
 ```rust
 let weights: HashMap<&str, i32> = [("0.txt", 4), ("1.txt", 6), ("2.txt", 3), ("3.txt", 5)].iter().cloned().collect();
@@ -48,7 +48,7 @@ This example means following.
 
 Users can extend to use their particular communication service by implementing `Notice` protocol.
 
-So far, this project plan to support Discord.
+So far, this project plan to support Discord by default.
 
 ## Aggregate
 
