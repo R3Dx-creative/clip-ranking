@@ -1,6 +1,6 @@
 # clip-ranking
 
-A system for interesting items for closed friend community.
+A system for items that is interesting to closed friend community.
 
 For example, it notify game clips to Discord and aggregate reactions on them, and sort them.
 
@@ -18,7 +18,7 @@ So far, this project plan to support local file system and Google Drive by defau
 
 ## Rules for Sorting
 
-Users can set their rules for sorting of items according weight. (info to sort item is called "Shipment")
+Users can set their rules for sorting weighted items. (info to sort item is called "Shipment")
 
 ```rust
 let weights: HashMap<&str, i32> = [("0.txt", 4), ("1.txt", 6), ("2.txt", 3), ("3.txt", 5)].iter().cloned().collect();
