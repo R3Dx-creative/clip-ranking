@@ -16,7 +16,7 @@ where
     
     fn glob(&self, pattern: &str) -> Result<Self::Items, PatternError>;
     fn exists<P: AsRef<Path>>(&self, item: P) -> bool;
-    fn create_all_dirs<P: AsRef<Path>>(&self, path: P) -> io::Result<()>;
+    fn create_dir_all<P: AsRef<Path>>(&self, path: P) -> io::Result<()>;
     fn rename<P: AsRef<Path>, Q: AsRef<Path>>(&self, from: P, to: Q) -> io::Result<()>;
 }
 
@@ -84,7 +84,7 @@ impl Storage for LocalStorage {
         path.as_ref().exists()
     }
 
-    fn create_all_dirs<P: AsRef<Path>>(&self, path: P) -> io::Result<()> {
+    fn create_dir_all<P: AsRef<Path>>(&self, path: P) -> io::Result<()> {
         fs::create_dir_all(path)
     }
 
