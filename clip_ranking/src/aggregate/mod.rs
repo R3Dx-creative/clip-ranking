@@ -1,7 +1,6 @@
 use std::fmt;
 use std::error::Error;
 
-// ===--- trait ---===
 pub trait Aggregate
 where
     Self::Items: Iterator<Item=Self::Item>

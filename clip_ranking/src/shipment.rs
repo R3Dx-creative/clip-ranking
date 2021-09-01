@@ -3,11 +3,11 @@ use std::cmp::Reverse;
 use std::collections::HashMap;
 use std::io;
 use std::path::{ PathBuf };
-use crate::storage as s;
+use crate::{ Storage };
 
 pub struct Shipment(pub PathBuf, pub String);
 
-pub fn ship<S: s::Storage>(storage: &S, shipments: Vec<Shipment>) -> io::Result<()> {
+pub fn ship<S: Storage>(storage: &S, shipments: Vec<Shipment>) -> io::Result<()> {
     shipments
         .iter()
         .filter_map(|Shipment(path, dst)| {

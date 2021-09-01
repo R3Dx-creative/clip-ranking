@@ -1,7 +1,6 @@
 use std::fmt;
 use std::error::Error;
 
-// ===--- trait ---===
 pub trait Notice {
     type Content;
     fn send(&self, content: Self::Content) -> Result<(), NoticeError>;
