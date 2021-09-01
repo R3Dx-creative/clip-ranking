@@ -1,13 +1,19 @@
 pub mod storage;
 pub mod config;
 pub mod shipment;
+pub mod notice;
+pub mod aggregate;
 
 #[cfg(test)]
 mod test {
     use std::collections::HashMap;
+    use std::io::{self, Read};
     use std::iter::FromIterator;
     use std::path::Path;
+    use std::vec::IntoIter;
     use super::*;
+    use super::notice::{ Notice, NoticeError };
+    use super::aggregate:: { Aggregate, AggregateError };
 
     #[test]
     fn test_config() {
@@ -81,4 +87,48 @@ mod test {
     //         );
     //     }
     // }
+    
+    struct Standard {}
+
+    impl Notice for Standard {
+        type Content = String;
+
+        fn send(&self, content: String) -> Result<(), NoticeError> {
+            println!("{:?}", content);
+            Ok(())
+        }
+    }
+
+    #[test]
+    fn test_notice() {
+        let standard = Standard{};
+        standard.send("Hello".to_string()).unwrap();
+    }
+
+    impl Aggregate for Standard {
+        type Item = String;
+        type Items = IntoIter<Self::Item>;
+        fn aggregate(&self) -> Result<Self::Items, AggregateError> {
+            let stdin = io::stdin();
+            let x: io::Result<Vec<String>> = (0..3)
+                .map(|_| {
+                    let mut buffer = String::new();
+                    stdin.read_line(&mut buffer)?;
+                    Ok(buffer)
+                })
+                .collect();
+            match x {
+                Ok(v) => Ok(v.into_iter()),
+                Err(_) => Err(AggregateError { msg: "aggregate error"})
+            }
+        }
+    }
+
+    #[test]
+    fn test_aggregate() {
+        let standard = Standard{};
+        for line in standard.aggregate().unwrap() {
+            print!("{:}", line);
+        }
+    }
 }
